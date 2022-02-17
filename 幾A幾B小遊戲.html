@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>幾A幾B小遊戲</title>
+<script>
+      function compare(pwd, guess){
+            var A=0;
+            var B=0;
+            var check = new Array();  //紀錄答案值
+            var target = new Array(); //紀錄玩家輸入值
+            
+            for(k=0; k<4; k++){ //把答案分別記錄
+                  check[k] = pwd.charAt(k)
+            }
+            
+            for(t=0; t<4; t++){  //把玩家輸入值分開紀錄
+                  target[t] = guess.charAt(t)
+            }
+            
+            for(r=0 ; r < target.length; r++){
+                  for(e=0; e < target.length; e++){
+                        if(r == e && check[r]== target[e]){ //位置數值都正確
+                              A++;
+                        }else if(r != e && check[r] == target[e]){ //數值對位置不對
+                              B++;     
+                        }
+                  }
+            }   
+
+            alert(guess+"："+A+"A"+B+"B"); //提示幾A幾B
+            document.write(guess+"："+A+"A"+B+"B"+"<br/>"); //顯示過程
+            return A;   //傳回A值
+                 
+      }
+
+</script>
+
+</head>
+<body>
+<h2>猜幾A幾B遊戲</h2>
+<hr/>
+<script>
+      //宣告
+      var guess = 0;
+      var times = 0;
+      var pwd = new Array();
+      var repeat = 0;
+      var A = 0;
+      
+      //建立pwd(不重複數字)
+      var arr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];   
+      var result = [];
+      var ranNum = 4;
+      
+      for (var i = 0; i < ranNum; i++) {
+            var ran = Math.floor(Math.random() * (arr.length - i));     //產生數值
+            result.push(arr[ran]);                                      //放入陣列
+            arr[ran] = arr[arr.length - i - 1];                         //去掉選過的值
+      };
+      
+      var pwd=result[0].toString()+result[1].toString()+result[2].toString()+result[3].toString(); //抽出的四個值連結在一起
+      //alert(pwd);//(測試)
+
+
+while (true){
+      try{
+            guess = window.prompt("輸入數字", guess); //玩家input值
+            
+            if(isNaN(guess)){               //輸入不是數值
+                  throw "not_number"
+            }else if(guess.length != 4){    //輸入的數值不等於四位數
+                  throw "not_four";
+                  document.write("請輸入四位數數值")
+                  continue
+            }
+                 
+      }catch(Input_Error){     //判斷input是否正確
+            if(Input_Error=="not_number"){
+                  alert("請輸入數值");
+                  continue
+            }else if(Input_Error=="not_four"){
+                  alert("請輸入四位數數值");
+                  continue
+            }   
+      }
+
+      for(ii=0; ii<3; ii++){    //判斷數值之間是否重複
+            for(jj=ii+1; jj<4; jj++){
+                  if(guess.charAt(ii) == guess.charAt(jj) && ii!=jj){
+                        repeat++; //重複次數
+                  }
+            }
+      }
+
+      if(repeat !=0){   //判斷四位數是否重複
+            alert("數字不可重複，請重新輸入");
+            repeat = 0; //重新計算重複次數
+            continue
+      }else{
+            A=compare(pwd,guess); //進入判斷AB
+            times ++;
+      }
+      
+    if(A!=4){ //沒有猜對，繼續下去
+        continue;
+    }else{
+        break;
+    }
+
+}
+
+//結束後顯示結果
+document.write("<hr/>")
+document.write("猜對了! 答案為：" + pwd + "<br/>");
+document.write("共猜了：" + times + "次");
+
+
+
+</script>
+</body>
+</html>
